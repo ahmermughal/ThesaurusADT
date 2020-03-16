@@ -24,14 +24,16 @@ void addWordFunction(){
         cout<<"\n Enter synonym: ";
         string syn;
         cin>> syn;
-        list.insertSynonymAtWord(word, syn);
+       // list.insertSynonymAtWord(word, syn);
     }
 }
 
-void addSynonymOfWord(){
+void addWordByCharFunction(){
     cout<<"Enter word: ";
     string word;
     cin>>word;
+    alphabetNode* alphaNode = list.getAlphaNodeByChar(word.at(0));
+    list.insertWordAtAlphaNode(alphaNode, word);
     cout<<"\nHow many synoyms do you wish to add?\n";
     int size;
     cin>>size;
@@ -39,7 +41,23 @@ void addSynonymOfWord(){
         cout<<"\n Enter synonym: ";
         string syn;
         cin>> syn;
-        list.insertSynonymAtWord(word, syn);
+        list.insertSynonymAtWord(alphaNode, word, syn);
+    }
+}
+
+void addSynonymOfWord(){
+    cout<<"Enter word: ";
+    string word;
+    cin>>word;
+    alphabetNode* alphaNode = list.getAlphaNodeByChar(word.at(0));
+    cout<<"\nHow many synoyms do you wish to add?\n";
+    int size;
+    cin>>size;
+    for(int i = 0; i < size; i++){
+        cout<<"\n Enter synonym: ";
+        string syn;
+        cin>> syn;
+        list.insertSynonymAtWord(alphaNode, word, syn);
     }
 }
 
@@ -47,7 +65,13 @@ void searchSynonymByWord(){
     cout<<"Enter word: ";
     string word;
     cin>>word;
-    list.findAndDisplaySynoymsByWord(word);
+    alphabetNode* alphaNode = list.getAlphaNodeByChar(word.at(0));
+    list.findAndDisplaySynoymsByWord(alphaNode, word);
+
+}
+
+void showAlphaNode(){
+    list.displayLinkedListChar();
 }
 
 int main(int argc, const char * argv[]) {
@@ -70,15 +94,17 @@ int main(int argc, const char * argv[]) {
                 searchSynonymByWord();
                 break;
             case 3:
-                addWordFunction();
+                //addWordFunction();
                 //list.readFromFile();
+                addWordByCharFunction();
                 break;
             case 4:
                 addSynonymOfWord();
 
                 break;
             case 5:
-                list.displayLinkedList();
+                //list.displayLinkedList();
+                showAlphaNode();
                 break;
             case 6:
                 list.writeListToFile();

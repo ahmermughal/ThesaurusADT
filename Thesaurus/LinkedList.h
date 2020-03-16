@@ -40,19 +40,30 @@ class LinkedList{
 private:
     wordNode* head;
     wordNode* tail;
-    wordNode* traverseByWord(string word);
+    
+    alphabetNode* alphaHead;
+    alphabetNode* alphaTail;
+    
+    wordNode* traverseByWord(alphabetNode* node,string word);
     synNode* traverseSynByIndex(int index, synNode* head);
     void displayAllSynoymsByWord(wordNode* node);
+    void displayAllWordsByChar(alphabetNode* node);
+    alphabetNode* traverseAlphabetByChar(char c);
+    void createAlphabetNodes();
+    alphabetNode* insertAlphabetNode(char c);
     
 public:
     LinkedList();
     void insertWordAtStart(string newWord);
-    void insertSynonymAtWord(string word, string synonym);
+    void insertSynonymAtWord(alphabetNode* nord, string word, string synonym);
     void displayLinkedList();
+    void displayLinkedListChar();
     void insertWord(string newWord);
-    void findAndDisplaySynoymsByWord(string word);
+    void insertWordAtAlphaNode(alphabetNode* alphaNode ,string newWord);
+    void findAndDisplaySynoymsByWord(alphabetNode* node, string word);
     void writeListToFile();
     void readFromFile();
+    alphabetNode* getAlphaNodeByChar(char c);
 
 };
 
