@@ -11,39 +11,12 @@
 LinkedList::LinkedList(){
     alphaHead = NULL;
     alphaTail = NULL;
-    head = NULL;
-    tail = NULL;
     readFromFile();
 }
 
-
-void LinkedList::createAlphabetNodes(){
-    alphabetNode* alphaNode = new alphabetNode;
-    alphabetNode* temp = new alphabetNode;
-    
-    alphaNode->alphabet = 'a';
-    alphaNode->next = NULL;
-    alphaHead = alphaNode;
-    temp = alphaNode;
-    
-}
-
-
-void LinkedList::insertWordAtStart(string newWord){
-    wordNode* newNode = new wordNode;
-    newNode->word = newWord;
-    
-    if(head == NULL){
-        head = newNode;
-        tail = newNode;
-    }else{
-        newNode->next = head->next;
-        head = newNode;
-    }
-    newNode = NULL;
-}
-
-wordNode* LinkedList::traverseByWord(alphabetNode* node,string word){
+// traverse words Linked List
+// returns the found word node
+wordNode* LinkedList::traverseByWord(alphabetNode* node,string word){   
     for(wordNode* temp = node->words; temp != NULL; temp= temp->next){
         if(temp->word == word){
             return temp;
@@ -52,6 +25,8 @@ wordNode* LinkedList::traverseByWord(alphabetNode* node,string word){
     return NULL;
 }
 
+// traverse alphabet linked list
+// returns the found alphabet node
 alphabetNode* LinkedList::traverseAlphabetByChar(char c){
     if(alphaHead != NULL){
         for(alphabetNode* temp = alphaHead; temp != NULL; temp = temp->next){
@@ -63,13 +38,12 @@ alphabetNode* LinkedList::traverseAlphabetByChar(char c){
     return NULL;
 }
 
-void LinkedList::insertSynonymAtWord(alphabetNode* node,string word, string synonym){
-    
+// inserts synoynm of the passed word
+void LinkedList::insertSynonymAtWord(alphabetNode* node, string word, string synonym){
     synNode* newNode = new synNode;
     newNode->word = synonym;
     newNode->next = NULL;
     wordNode* wordNode = traverseByWord(node, word);
-    //MARK - wordNode returns null if 2 words are added.
     if(wordNode->synListSize == 0){
         wordNode->synonyms = newNode;
         wordNode->synListSize++;
@@ -80,6 +54,8 @@ void LinkedList::insertSynonymAtWord(alphabetNode* node,string word, string syno
     }
 }
 
+// traverse Synonym Linked List
+// returns the found Synonym Node
 synNode* LinkedList::traverseSynByIndex(int index, synNode* head){
     synNode* temp;
     temp = head;
@@ -89,16 +65,7 @@ synNode* LinkedList::traverseSynByIndex(int index, synNode* head){
     return temp;
 }
 
-void LinkedList::displayLinkedList(){
-    wordNode* temp = head;
-    while (temp != NULL){
-        cout<<temp->word<<endl;
-        displayAllSynoymsByWord(temp);
-        temp = temp->next;
-    }
-    system( "read -n 1 -s -p \"Press any key to continue...\"" );
-}
-
+// display all the words in the linked list
 void LinkedList::displayAllWordsByChar(alphabetNode *node){
     wordNode* wordTemp = node->words;
     for(int i= 0; i < node->wordListSize; i++){
@@ -109,46 +76,33 @@ void LinkedList::displayAllWordsByChar(alphabetNode *node){
     }
 }
 
+// display all the alphabets with the words and synoyms
 void LinkedList::displayLinkedListChar(){
     alphabetNode* temp = alphaHead;
     while (temp != NULL){
         cout<<temp->alphabet<<endl;
-        cout<<temp->wordListSize<<endl;
         displayAllWordsByChar(temp);
         temp = temp->next;
     }
     system( "read -n 1 -s -p \"Press any key to continue...\"" );
 }
-
+// display all the synoynms of a word
 void LinkedList::displayAllSynoymsByWord(wordNode* node){
+    if(node != NULL){
     synNode* synTemp = node->synonyms;
     for(int i= 0; i < node->synListSize; i++){
         if(synTemp != NULL)
             cout<<"\t\t"<<synTemp->word<<endl;
         synTemp = synTemp->next;
     }
-}
-
-void LinkedList::insertWord(string newWord){
-    
-    wordNode* newNode = new wordNode;
-    newNode->word = newWord;
-    newNode->next = NULL;
-    newNode->synonyms = NULL;
-    
-    if(head ==  NULL){
-        head = newNode;
-        tail = newNode;
-    }else{
-        wordNode* temp = head;
-        while(temp->next != NULL){
-            temp= temp->next;
-        }
-        temp->next = newNode;
     }
+
 }
 
-void LinkedList::insertWordAtAlphaNode(alphabetNode *alphaNode, string newWord){    
+// inserts word at the alphabet node
+void LinkedList::insertWordAtAlphaNode(alphabetNode *alphaNode, string newWord){
+    wordNode* newNode = traverseByWord(alphaNode, newWord);
+    if(newNode == NULL){
     wordNode* wordHead = alphaNode->words;
     wordNode* newNode = new wordNode;
     newNode->word = newWord;
@@ -166,15 +120,21 @@ void LinkedList::insertWordAtAlphaNode(alphabetNode *alphaNode, string newWord){
         temp->next = newNode;
         alphaNode->wordListSize++;
     }
+    }else{
+        cout<<"Word Already Exsists!"<<endl;
+        system( "read -n 1 -s -p \"Press any key to continue...\"" );
+    }
     
 }
 
+// gets alphabet or creates a new alphabet node
 alphabetNode* LinkedList::getAlphaNodeByChar(char c){
     alphabetNode* node = traverseAlphabetByChar(c);
     if(node != NULL) return node;
     else return insertAlphabetNode(c);
 }
 
+// creates alphabet node
 alphabetNode* LinkedList::insertAlphabetNode(char c){
     
     alphabetNode* newNode = new alphabetNode;
@@ -196,12 +156,19 @@ alphabetNode* LinkedList::insertAlphabetNode(char c){
     return newNode;
 }
 
+// find and prints synonym by word
 void LinkedList::findAndDisplaySynoymsByWord(alphabetNode* node,string word){
     wordNode* currentWordNode = traverseByWord(node, word);
+    if(currentWordNode == NULL){
+        cout<<word<<" does not exsist!"<<endl;
+        system( "read -n 1 -s -p \"Press any key to continue...\"" );
+        return;
+    }
     displayAllSynoymsByWord(currentWordNode);
     
 }
 
+// writes the current multilinkedlist to file
 void LinkedList::writeListToFile(){
     ofstream outFile("Thesaurus.txt");
     
@@ -228,9 +195,7 @@ void LinkedList::writeListToFile(){
     
     outFile.close();
 }
-
-
-
+// reads all the data from file
 void LinkedList::readFromFile(){
     string fileName = "Thesaurus.txt";
     ifstream inFile(fileName);
@@ -245,7 +210,6 @@ void LinkedList::readFromFile(){
 
         if(pch!= NULL){
             alphabetNode* alphaNode = getAlphaNodeByChar(pch[0]);
-            insertWord(pch);
             insertWordAtAlphaNode(alphaTail, pch);
             pch = strtok(NULL, ":");
             while(pch!= NULL){
@@ -253,7 +217,6 @@ void LinkedList::readFromFile(){
                 pch = strtok(NULL, ":");
             }
         }
-
         while (inFile >> nextItem) {
             int strSize = nextItem.length();
             char str[strSize+1];
@@ -265,11 +228,10 @@ void LinkedList::readFromFile(){
             if(pch!= NULL){
 
                 alphabetNode* alphaNode = getAlphaNodeByChar(pch[0]);
-                insertWord(pch);
                 insertWordAtAlphaNode(alphaTail, pch);
                 pch = strtok(NULL, ":");
                 while(pch!= NULL){
-                    insertSynonymAtWord(, string(pch));
+                    insertSynonymAtWord(alphaNode, currentWord, string(pch));
 
                     pch = strtok(NULL, ":");
                 }
@@ -278,4 +240,63 @@ void LinkedList::readFromFile(){
         }
     }
     inFile.close();
+}
+
+// delete synoyms of a word
+void LinkedList::deleteWordSynonyms(string word){
+    
+    alphabetNode* alphaNode = getAlphaNodeByChar(word.at(0));
+    wordNode* currentWordNode = traverseByWord(alphaNode, word);
+    if(currentWordNode != NULL){
+    synNode* synNodeTemp = currentWordNode->synonyms;
+    synNode* nextNode = synNodeTemp;
+    while (synNodeTemp != NULL) {
+        nextNode = synNodeTemp->next;
+        delete synNodeTemp;
+        synNodeTemp = nextNode;
+    }
+    currentWordNode->synListSize = 0;
+    synNodeTemp = NULL;
+    nextNode = NULL;
+    }else{
+        cout<<"Word Does Not Exsist!"<<endl;
+    }
+}
+
+// delete the passed word
+void LinkedList::deleteWord(string word){
+    alphabetNode* alphaNode = getAlphaNodeByChar(word.at(0));
+    wordNode* currentWordNode = traverseByWord(alphaNode, word);
+    
+    if(currentWordNode != NULL){
+    alphaNode->wordListSize -=1;
+    
+    if(alphaNode->words == currentWordNode){
+        // word is head
+        cout<<"Current Word is Header"<<endl;
+        alphaNode->words = alphaNode->words->next;
+        delete currentWordNode;
+    }else{
+        wordNode* prevNode = alphaNode->words;
+        
+        while (prevNode->next != currentWordNode) {
+            prevNode = prevNode->next;
+        }
+        
+        if(currentWordNode->next == NULL){ // word is tail
+            prevNode->next = NULL;
+            delete currentWordNode;
+        }else{
+            // word is somewhere in middle
+            prevNode->next = currentWordNode->next;
+            currentWordNode->next = NULL;
+            delete currentWordNode;
+        }
+    }
+    
+    alphaNode = NULL;
+    currentWordNode = NULL;
+    }else{
+        cout<<"Word Does Not Exsist!"<<endl;
+    }
 }

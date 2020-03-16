@@ -1,0 +1,6 @@
+alps:mount:pike:summit
+bachelor:available:unattached:single:celibate
+baby:dwarf:mini:little
+hacked:bugged:fuming:dogged:enraged
+headed:aimed:going:moving:directed
+packet:bag:carton:folder:file

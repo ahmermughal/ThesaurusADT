@@ -37,10 +37,7 @@ struct alphabetNode{
 };
 
 class LinkedList{
-private:
-    wordNode* head;
-    wordNode* tail;
-    
+private:    
     alphabetNode* alphaHead;
     alphabetNode* alphaTail;
     
@@ -49,21 +46,21 @@ private:
     void displayAllSynoymsByWord(wordNode* node);
     void displayAllWordsByChar(alphabetNode* node);
     alphabetNode* traverseAlphabetByChar(char c);
-    void createAlphabetNodes();
     alphabetNode* insertAlphabetNode(char c);
     
 public:
     LinkedList();
-    void insertWordAtStart(string newWord);
     void insertSynonymAtWord(alphabetNode* nord, string word, string synonym);
     void displayLinkedList();
     void displayLinkedListChar();
-    void insertWord(string newWord);
     void insertWordAtAlphaNode(alphabetNode* alphaNode ,string newWord);
     void findAndDisplaySynoymsByWord(alphabetNode* node, string word);
     void writeListToFile();
     void readFromFile();
     alphabetNode* getAlphaNodeByChar(char c);
+    void deleteWordSynonyms(string word);
+    void deleteWord(string word);
+
 
 };
 
